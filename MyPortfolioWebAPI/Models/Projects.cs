@@ -18,7 +18,7 @@ namespace MyPortfolioWebAPI.Models
         public string Message { get; set; } = string.Empty;
 
         [NotMapped]
-        public IFormFile ImageFile { get; set; }
+        public IFormFile ImageFile { get; set; } = null!;
 
         [NotMapped]
        public string ImageSrc { get; set; } = string.Empty;

@@ -134,7 +134,7 @@ namespace MyPortfolioWebAPI.Controllers
         {
             string ImageName = new String(Path.GetFileNameWithoutExtension(ImageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
             ImageName = ImageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(ImageFile.FileName);
-            var ImagePath= Path.Combine(_hostEnvironment.ContentRootPath,"Images" ,ImageName);
+            var ImagePath= Path.Combine(_hostEnvironment.ContentRootPath, "Images" ,ImageName);
             using(var fileStream =new FileStream(ImagePath,FileMode.Create))
             {
                 await ImageFile.CopyToAsync(fileStream);

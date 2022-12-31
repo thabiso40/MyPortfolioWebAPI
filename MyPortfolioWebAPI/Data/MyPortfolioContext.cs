@@ -16,7 +16,11 @@ namespace MyPortfolioWebAPI.Data
         {
 
         }
+
+
         public DbSet<Emails> Emails { get; set; } = null!;
         public DbSet<Projects> Projects { get; set; } = null!;
+
+
     }
 }

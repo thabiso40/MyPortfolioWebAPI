@@ -11,14 +11,16 @@ using MyPortfolioWebAPI.Data;
 using Microsoft.AspNetCore.Cors;
 using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.FileProviders;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddDbContext<MyPortfolioContext>(options=>options.UseSqlServer(builder.Configuration["Data:ConectionStrings:DefaultConnection"]));
+builder.Services.AddDbContext<MyPortfolioContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]));
 
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
@@ -49,19 +51,32 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else if (app.Environment.IsProduction())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(C =>
+    {
+        C.SwaggerEndpoint("/swagger/v1/swagger.json", "Portfolio API V1");
+        C.RoutePrefix = String.Empty;
+    });
+}
 
 
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors(options=>options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
+builder.Services.AddDirectoryBrowser();
+app.UseStaticFiles();
 
 app.UseStaticFiles(new StaticFileOptions
 {
-FileProvider=new PhysicalFileProvider(
-    Path.Combine(Directory.GetCurrentDirectory(),"Images")),
-    RequestPath="/Images"
+    FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath,"Images")),
+    RequestPath = "/Images"
 });
+
+
 app.Run();

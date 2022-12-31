@@ -1,6 +1,5 @@
 ﻿#nullable disable
 using System;
-using System.Net.Mail;
 using System.Net;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using MyPortfolioWebAPI.Data;
 using MyPortfolioWebAPI.Models;
 using Microsoft.AspNetCore.Cors;
-using FluentEmail.Smtp;
 using System.Text;
+using MimeKit;
+using MimeKit.Text;
+using MailKit.Net.Smtp;
+using MailKit.Security;
 
 namespace MyPortfolioWebAPI.Controllers
 {
@@ -97,19 +99,21 @@ namespace MyPortfolioWebAPI.Controllers
 
             try
             {
-            
-
                 StringBuilder template = new();
                 template.AppendLine("from  " + email.EmailAddress);
                 template.AppendLine("Name  " + email.Name);
                 template.AppendLine(email.Message);
-                var client = new SmtpClient("smtp.gmail.com", 587)
-                {
-                    Credentials = new NetworkCredential("gshadow057@gmail.com", "OracleUser1"),
-                    EnableSsl = true
-                };
-                client.Send("gshadow057@gmail.com", "thabisofakude40@gmail.com", "From portfolio", template.ToString());
 
+                var Mails = new MimeMessage();
+                Mails.From.Add(MailboxAddress.Parse("gshadow057@gmail.com"));
+                Mails.To.Add(MailboxAddress.Parse("thabisofakude40@gmail.com"));
+                Mails.Subject = " Portfilio response ";
+                Mails.Body=new TextPart(TextFormat.Text) { Text = template.ToString() };
+                using var smtp = new SmtpClient();
+                smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                smtp.Authenticate("gshadow057@gmail.com", "mvdtjsnsfqntdgqe");
+                smtp.Send(Mails);
+                smtp.Disconnect(true);
             }
             catch (Exception ex)
             {

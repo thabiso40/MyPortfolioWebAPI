@@ -11,14 +11,14 @@ using MyPortfolioWebAPI.Data;
 namespace MyPortfolioWebAPI.Migrations
 {
     [DbContext(typeof(MyPortfolioContext))]
-    [Migration("20220403212848_initial create")]
-    partial class initialcreate
+    [Migration("20220619175652_initialCreate")]
+    partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -64,15 +64,15 @@ namespace MyPortfolioWebAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ProjectName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("URLLink")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
